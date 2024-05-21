@@ -1,0 +1,63 @@
+1 - Criar ambiente virtual
+    python -m venv venv
+
+2 - Rodar ambiente virtual - Sempre verificar se está dentro do venv para não gerar qualquer tipo de erro
+    .\venv\Scripts\activate
+
+3 - Instalar Django
+    pip install django
+
+4 - Criar projeto Django
+    django-admin startproject app . (app = nome do projeto / . = quer criar o projeto neste diretorio)
+
+5 - Montar estrutura do banco de dados (criar tabelas padrões)
+    python manage.py migrate
+
+6 - Criar um super usuário admin
+    python manage.py createsuperuser
+
+7 - Rodar o app para testes
+    python manage.py runserver
+
+Até aqui é o básico para colocar a nova aplicação para rodar e funcionar o django Admin
+------------------------------------------------------------------------------------------------------
+Em seguida, criar os apps dentro da aplicação (apps = aos "módulos" que a aplicação vai ter. "cadastro de produtos, clientes, fornecedores e etc...")
+
+8 - Criar um novo app
+    python manage.py startapp nome_do_app
+
+9 - Sempre que criar um novo app tem que adicionar ao settings.py do coração do projeto (coração = pasta app)
+    app/settings.py -> no INSTALLED_APPS adiciona uma linha 'nome_do_app',
+
+10 - Criar os models (tabelas do bd)
+    dentro de cada app criado no arquivo models.py seguir o padrão básico:
+    
+    class Genre(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
+
+11 - Sempre que criar ou alterar um model tem que rodar o makemigrations para ele gerar o migrate.
+    python manage.py makemigrations
+
+12 - Sempre que cria uma migration tem que rodar o migrate para criar as tabelas no banco de dados.
+    python manage.py migrate
+
+13 - Se quiser que o novo app apareça no painel admin do django, deve-se entrar no arquivo admin.py dentro da pasta app e adicionar a configuração.
+
+    from django.contrib import admin
+    from genres.models import NameApp
+
+    @admin.register(NameApp)
+    class NameClass(admin.ModelAdmin):
+        list_display = ('id', 'name', 'etc')
+
+14 - Para que o novo app fique acessível (CRUD) deve-se adicionar a url no coração do app e importar no topo da pág. a view de interesse.
+    Caminho app/urls.py -> na urlpatterns adiciona uma nova linha como no ex. abaixo:
+    path('rotaName/', name_view, name='name-view'),
+
+    no topo importar a view:
+    from appName.views import name_view
+
+
